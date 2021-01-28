@@ -6,29 +6,36 @@ using System.Threading.Tasks;
 using cw3.DAL;
 using cw3.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 
 
-namespace cw3.Controllers{
 
+
+namespace cw3.Controllers 
+{
     [ApiController]
     [Route("api/students")]
 
-      public class StudentsController : ControllerBase{
+    public class StudentsController : ControllerBase
+    {
 
-        private const string Conncetion = "Data Source=db-mssql;Initial Catalog=s189823;Integrated Security=True";
+        private const string Conncetion = "Data Source=db-mssql;Initial Catalog=s18823;Integrated Security=True";
 
         [HttpGet]
-        public IActionResult GetStudent() {
+        public IActionResult GetStudent()
+        {
             List<Student> studentsList = new List<Student>();
             Student student;
             using (SqlConnection conn = new SqlConnection(Conncetion))
-            using (SqlCommand command = new SqlCommand()) {
+            using (SqlCommand command = new SqlCommand())
+            {
                 command.Connection = conn;
                 command.CommandText = "select * from student";
 
                 conn.Open();
                 SqlDataReader sqlReader = command.ExecuteReader();
-                while (sqlReader.Read()) {
+                while (sqlReader.Read())
+                {
                     student = new Student();
                     student.IndexNumber = sqlReader["IndexNumber"].ToString();
                     student.FirstName = sqlReader["FirstName"].ToString();
@@ -43,13 +50,15 @@ namespace cw3.Controllers{
         }
 
         [HttpGet("{IndexNumber}")]
-        public IActionResult GetStudent(string IndexNumber) {
+        public IActionResult GetStudent(string IndexNumber)
+        {
             Student student;
             Enrollment enrollment = new Enrollment();
             Studies studies = new Studies();
             List<Object> query = new List<object>();
             using (SqlConnection conn = new SqlConnection(Conncetion))
-            using (SqlCommand command = new SqlCommand()){
+            using (SqlCommand command = new SqlCommand())
+            {
                 command.Connection = conn;
                 command.CommandText = "select Student.idEnrollment, semester, name, startdate from Enrollment inner join student on Enrollment.IdEnrollment = Student.IdEnrollment inner join Studies on Enrollment.idStudy = Studies.idStudy where Student.IndexNumber = @index";
 
@@ -57,7 +66,8 @@ namespace cw3.Controllers{
 
                 conn.Open();
                 var sqlReader = command.ExecuteReader();
-                if(sqlReader.Read()){
+                if (sqlReader.Read())
+                {
                     enrollment.IdEnrollment = Int32.Parse(sqlReader["IdEnrollment"].ToString());
                     enrollment.Semester = Int32.Parse(sqlReader["Semester"].ToString());
                     studies.Name = sqlReader["Name"].ToString();

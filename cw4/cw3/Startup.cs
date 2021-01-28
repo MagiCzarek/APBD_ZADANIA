@@ -23,14 +23,14 @@ namespace cw3
 
         public IConfiguration Configuration { get; }
 
-        
+       
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IDbService, MockDbService>();
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
