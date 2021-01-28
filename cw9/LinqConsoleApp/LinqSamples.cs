@@ -215,6 +215,7 @@ namespace LinqConsoleApp
         public void Przyklad2()
         {
             
+             var res =Emps.Where(emp => emp.Job == "Frontend programmer" && emp.Salary >1000).OrderByDescending(emps =>emps.Ename) ;
 
         }
 
@@ -223,7 +224,7 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad3()
         {
-          
+          var x= Emps.Max(e => e.Salary);
         }
 
         /// <summary>
@@ -231,7 +232,7 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad4()
         {
-
+            var x =Emps.Where(e => e.Salary == Emps.Max(e1 => e1.Salary));
         }
 
         /// <summary>
@@ -239,7 +240,7 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad5()
         {
-
+             var x =Emps.Select(e => new { Nazwisko=e.Ename, Praca=e.Job});
         }
 
         /// <summary>
@@ -249,7 +250,8 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad6()
         {
-
+            var x = Emps.Join(Depts, emp => emp.Deptno, dept => dept.Deptno,
+                (emp, dept) => new {emp.Ename, emp.Job, dept.Dname});
         }
 
         /// <summary>
@@ -257,7 +259,11 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad7()
         {
-
+             var res = Emps.GroupBy(emp => emp.Job).Select(emp2 => new{
+                Praca = emp2.Key,
+                LiczbaPracownikow=emp2.Count()
+            });
+            ResultsDataGridView.DataSource = res.ToList();
         }
 
         /// <summary>
@@ -266,7 +272,7 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad8()
         {
-
+            var x = Emps.Any(emp => emp.Job == "Backend Programmer");
         }
 
         /// <summary>
@@ -275,7 +281,7 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad9()
         {
-
+            var x = Emps.Where(emp => emp.Job == "Frontend Programmer").OrderByDescending(emp => emp.HireDate).First();
         }
 
         /// <summary>
@@ -285,20 +291,25 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad10Button_Click()
         {
-
+            var r = (from emp in Emps select new{emp.Ename,emp.Job, emp.HireDate}).Union(from emp in Emps
+                                  select new{Ename = "Brak wartosci",Job = (String)null,HireDate = (DateTime?)null});
         }
 
         //Znajdź pracownika z najwyższą pensją wykorzystując metodę Aggregate()
         public void Przyklad11()
         {
-
+            var x = Emps.Aggregate((a, e) => e.Salary > a.Salary ? e : a);
         }
 
         //Z pomocą języka LINQ i metody SelectMany wykonaj złączenie
         //typu CROSS JOIN
         public void Przyklad12()
         {
-
+            var res = Emps.SelectMany(emp => Depts, (e, d) => new{
+                Nazwisko = e.Ename,
+                Departament = d.Dname
+                 });
+            ResultsDataGridView.DataSource = res.ToList();
         }
     }
 }
