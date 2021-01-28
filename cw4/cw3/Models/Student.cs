@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 namespace cw3
 {
     public class Student{
-        public int idNumber { get; set; }
+        public string IndexNumber { get; set; }
 
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
 
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
-        public string indexNumber { get; set; }
+        public string Birthdate { get; set; }
+
+        public int IdEnrollment { get; set; }
     }
 }

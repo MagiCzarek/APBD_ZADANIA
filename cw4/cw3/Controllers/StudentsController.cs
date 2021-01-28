@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using cw3.DAL;
+using cw3.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
