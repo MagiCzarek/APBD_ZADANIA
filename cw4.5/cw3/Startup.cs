@@ -26,7 +26,7 @@ namespace cw3
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IDbService, MockDbService>();
+            services.AddTransient<IStudentDbService, SqlServerDbService>();
             services.AddControllers();
         }
 
