@@ -1,0 +1,12 @@
+requestsLog: 
+/weatherforecast
+GET
+
+requestsLog: 
+/weatherforecast
+GET
+
+requestsLog: 
+//api/enrollments
+GET
+
