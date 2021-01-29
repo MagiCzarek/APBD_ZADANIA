@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace cw3.Services
@@ -219,5 +220,41 @@ namespace cw3.Services
             }
             return true;
         }
+
+
+
+        public Student GetStudent(string index)
+        {
+            Regex regex = new Regex(@"^s[0-9]+$");
+            Match match = regex.Match(index);
+            if (match.Success)
+            {
+                Student student = new Student();
+                using (SqlConnection conn = new SqlConnection(Conncetion))
+                using (SqlCommand command1 = new SqlCommand())
+                {
+                    command1.Connection = conn;
+                    command1.CommandText = "select IndexNumber, FirstName, LastName, Birthdate , IdEnrollment from Student where IndexNumber = @index";
+
+                    command1.Parameters.AddWithValue("index", index);
+
+                    conn.Open();
+                    var sqlReader = command1.ExecuteReader();
+
+                    if (sqlReader.Read())
+                    {
+                        student.IndexNumber = sqlReader["IndexNumber"].ToString();
+                        student.FirstName = sqlReader["FirstName"].ToString();
+                        student.LastName = sqlReader["LastName"].ToString();
+                        student.Birthdate = sqlReader["Birthdate"].ToString();
+                        student.IdEnrollment = Int32.Parse(sqlReader["IdEnrollment"].ToString());
+                        return student;
+                    }
+                    sqlReader.Close();
+                }
+            }
+            return null;
+        }
     }
+
 }

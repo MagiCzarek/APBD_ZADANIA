@@ -1,0 +1,8 @@
+requestsLog: 
+/weatherforecast
+GET
+
+requestsLog: 
+/weatherforecast
+GET
+

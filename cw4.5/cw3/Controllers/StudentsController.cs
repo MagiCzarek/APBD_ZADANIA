@@ -7,8 +7,6 @@ using cw3.DAL;
 using cw3.Models;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace cw3.Controllers{
 
     [ApiController]
@@ -45,7 +43,7 @@ namespace cw3.Controllers{
 
         [HttpGet("{IndexNumber}")]
         public IActionResult GetStudent(string IndexNumber) {
-            Student student;
+           
             Enrollment enrollment = new Enrollment();
             Studies studies = new Studies();
             List<Object> query = new List<object>();
@@ -62,7 +60,7 @@ namespace cw3.Controllers{
                     enrollment.IdEnrollment = Int32.Parse(sqlReader["IdEnrollment"].ToString());
                     enrollment.Semester = Int32.Parse(sqlReader["Semester"].ToString());
                     studies.Name = sqlReader["Name"].ToString();
-                    enrollment.Startdate = sqlReader["StartDate"].ToString();
+                    enrollment.Startdate = sqlReader["Startdate"].ToString();
 
                     query.Add(enrollment.IdEnrollment);
                     query.Add(enrollment.Semester);

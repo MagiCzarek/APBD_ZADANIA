@@ -17,5 +17,7 @@ namespace cw3.Services
         bool PromoteStudents(Promotions promotions);
 
         public Enrollment GetEnrollment();
+
+        public Student GetStudent(string index);
     }
 }
