@@ -10,11 +10,22 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using s18823_Egzam.Controllers.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace s18823_Egzam
 {
     public class Startup
     {
+        private const string Conncetion = "Data Source=db-mssql;Initial Catalog=s18823;Integrated Security=True;MultipleActiveResultSets=True";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +36,9 @@ namespace s18823_Egzam
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<HospitalDbContext>(options => {
+                options.UseSqlServer(Conncetion);
+            });
             services.AddControllers();
         }
 

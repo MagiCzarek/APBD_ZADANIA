@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace cw11.Models
+namespace s18823_Egzam.Controllers.Models
 {
     public class Prescription
     {

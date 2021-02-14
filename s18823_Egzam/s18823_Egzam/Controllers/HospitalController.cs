@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using cw11.Models;
-using cw11.Request;
-using Microsoft.AspNetCore.Mvc;
+using s18823_Egzam.Controllers.Models;
 
-namespace cw11.Controllers
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace s18823_Egzam.Controllers
 {
     public class HospitalController : ControllerBase
     {
@@ -18,77 +19,44 @@ namespace cw11.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetDoctor(int id)
+        public IActionResult GetMedicament(int id)
         {
-            if (hospitalDbContext.Doctor.Where(d => d.IdDoctor == id).Any())
+            if (hospitalDbContext.Medicament.Where(d => d.IdMedicament == id).Any())
             {
-                var doctor = hospitalDbContext.Doctor.SingleOrDefault(d => d.IdDoctor == id);
-                return Ok(doctor);
+                var prescription = hospitalDbContext.Prescription_Medicament
+                    .Include(d=>d.Prescription)
+                    .Where(d => d.IdMedicament == id).Select(d=>d.Prescription)
+                    .OrderBy(d=>d.Date).ToList();
+                var medicament = hospitalDbContext.Medicament.SingleOrDefault(d => d.IdMedicament == id);
+                medicament.Prescription = prescription;
+                return Ok(medicament);
             }
             return NotFound();
         }
 
-        [HttpPut]
-        public IActionResult AddDoctor(AddDoctor addDoctor)
-        {
-            if (!(hospitalDbContext.Doctor.Where(d => d.IdDoctor == addDoctor.IdDoctor).Any()))
-            {
-                var doctor = new Doctor
-                {
-                    IdDoctor = addDoctor.IdDoctor,
-                    FirstName = addDoctor.FirstName,
-                    LastName = addDoctor.LastName,
-                    Email = addDoctor.Email
-                };
-                hospitalDbContext.Doctor.Add(doctor);
-                hospitalDbContext.SaveChanges();
-                return Ok();
-            }
-            return BadRequest();
-        }
+        
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteDoctor(int id)
+        public IActionResult DeletePatient(int id)
         {
-            if (hospitalDbContext.Doctor.Where(d => d.IdDoctor == id).Any())
+            if (hospitalDbContext.Patient.Where(d => d.IdPatient == id).Any())
             {
-                var doctor = hospitalDbContext.Doctor.SingleOrDefault(d => d.IdDoctor == id);
-                hospitalDbContext.Doctor.Remove(doctor);
+
+                var presc = hospitalDbContext.Prescription.SingleOrDefault(d => d.IdPatient == id);
+                var prescmod = hospitalDbContext.Prescription_Medicament.Where(d => d.IdPrescription == presc.IdPrescription).ToList();
+                var patient = hospitalDbContext.Patient.SingleOrDefault(d => d.IdPatient == id);
+                foreach(var item in prescmod)
+                {
+                    hospitalDbContext.Prescription_Medicament.Remove(item);
+                }
+                hospitalDbContext.Prescription.Remove(presc);
+                hospitalDbContext.Patient.Remove(patient);
                 hospitalDbContext.SaveChanges();
                 return Ok();
             }
             return NotFound();
         }
 
-        [HttpPost]
-        public IActionResult ModifyStudent(ModifyDoctor modifyDoctor)
-        {
-            if (hospitalDbContext.Doctor.Where(d => d.IdDoctor == modifyDoctor.Id).Any())
-            {
-                var doctor = hospitalDbContext.Doctor.SingleOrDefault(s => s.IdDoctor == modifyDoctor.Id);
-                if (doctor.IdDoctor != Int32.Parse(modifyDoctor.IdDoctor) && modifyDoctor.IdDoctor != null)
-                {
-                    doctor.IdDoctor = Int32.Parse(modifyDoctor.IdDoctor);
-                    hospitalDbContext.SaveChanges();
-                }
-                if (doctor.FirstName != modifyDoctor.FirstName && modifyDoctor.FirstName != null)
-                {
-                    doctor.FirstName = modifyDoctor.FirstName;
-                    hospitalDbContext.SaveChanges();
-                }
-                if (doctor.LastName != modifyDoctor.LastName && modifyDoctor.LastName != null)
-                {
-                    doctor.LastName = modifyDoctor.LastName;
-                    hospitalDbContext.SaveChanges();
-                }
-                if (doctor.Email != modifyDoctor.Email && modifyDoctor.Email != null)
-                {
-                    doctor.Email = modifyDoctor.Email;
-                    hospitalDbContext.SaveChanges();
-                }
-                return Ok();
-            }
-            return NotFound();
-        }
+        
     }
 }

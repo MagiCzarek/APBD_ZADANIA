@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace cw11.Models
+namespace s18823_Egzam.Controllers.Models
 {
     public class HospitalDbContext : DbContext
     {
